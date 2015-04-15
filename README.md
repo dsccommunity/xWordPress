@@ -1,6 +1,6 @@
-{{AppVeyor build status badge for master branch}}
+[![Build status](https://ci.appveyor.com/api/projects/status/ry28ehtnhrybtjti/branch/master?svg=true)](https://ci.appveyor.com/project/PowerShell/xwordpress/branch/master)
 
-#{{ModuleName}}
+#xWordPress
 
 {{Description}}
 
