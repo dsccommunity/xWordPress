@@ -1,4 +1,4 @@
-[![Build status](https://ci.appveyor.com/api/projects/status/ry28ehtnhrybtjti/branch/master?svg=true)](https://ci.appveyor.com/project/PowerShell/xwordpress/branch/master)
+﻿[![Build status](https://ci.appveyor.com/api/projects/status/ry28ehtnhrybtjti/branch/master?svg=true)](https://ci.appveyor.com/project/PowerShell/xwordpress/branch/master)
 
 #xWordPress
 
@@ -30,6 +30,11 @@ Please check out common DSC Resources [contributing guidelines](https://github.c
 * **Ensure**: { Present }
 
 ## Versions
+
+### 1.1.0.0
+
+* Updated schema (ValueMap)
+* Fixed encoding
 
 ### 1.0.0.0
 
