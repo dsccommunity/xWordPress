@@ -31,6 +31,8 @@ Please check out common DSC Resources [contributing guidelines](https://github.c
 
 ## Versions
 
+### Unreleased
+
 ### 1.1.0.0
 
 * Updated schema (ValueMap)
