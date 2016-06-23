@@ -1,8 +1,11 @@
-Ôªø[![Build status](https://ci.appveyor.com/api/projects/status/ry28ehtnhrybtjti/branch/master?svg=true)](https://ci.appveyor.com/project/PowerShell/xwordpress/branch/master)
+[![Build status](https://ci.appveyor.com/api/projects/status/ry28ehtnhrybtjti/branch/master?svg=true)](https://ci.appveyor.com/project/PowerShell/xwordpress/branch/master)
 
 #xWordPress
 
 The **xWordPress** module contains the **xWordPressSite** and **xIisWordPressSite** DSC resources that setup a WordPress Site.
+
+This project has adopted the [Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/).
+For more information see the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additional questions or comments.
 
 ## Contributing
 Please check out common DSC Resources [contributing guidelines](https://github.com/PowerShell/DscResource.Kit/blob/master/CONTRIBUTING.md).
@@ -96,7 +99,7 @@ $configurationData = @{
             PSDscAllowPlainTextPassword = $true;
             WordPress = @{
                 Title = "DSC WordPress Site Title"
-                Admin = New-Object -TypeName System.Management.Automation.PSCredential -argumentlist (‚ÄúDscAdmin‚Äù,$pwd)
+                Admin = New-Object -TypeName System.Management.Automation.PSCredential -argumentlist (ìDscAdminî,$pwd)
                 Email = "dscadmin@contoso.com"
                 Uri = "http://$fqdn"
                 DownloadURI = "http://WordPress.org/latest.zip"
@@ -106,7 +109,7 @@ $configurationData = @{
                 TemplatePath = $WordPressTemplatePath  
                 UserName = $WordPressUserName
                 Database = $WordPressDatabase
-                User = New-Object -TypeName System.Management.Automation.PSCredential -argumentlist (‚Äú$WordPressUserName‚Äù,$pwd)  
+                User = New-Object -TypeName System.Management.Automation.PSCredential -argumentlist (ì$WordPressUserNameî,$pwd)  
             }    
 
             Php = @{
@@ -118,7 +121,7 @@ $configurationData = @{
             }
             PackageFolder = "$env:SystemDrive\packages"
             MySqlDownloadURI = "http://dev.mysql.com/get/Downloads/MySQLInstaller/mysql-installer-community-5.6.17.0.msi"
-            Credential = New-Object -TypeName System.Management.Automation.PSCredential -argumentlist (‚ÄúuserNameNotUsed‚Äù,$pwd) #the password for root. no user name is needed as MySql installer is using only the user "root".
+            Credential = New-Object -TypeName System.Management.Automation.PSCredential -argumentlist (ìuserNameNotUsedî,$pwd) #the password for root. no user name is needed as MySql installer is using only the user "root".
             PlainPassword = $plainPassword
 
          }
