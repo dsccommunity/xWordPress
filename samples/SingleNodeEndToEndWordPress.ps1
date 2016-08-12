@@ -1,3 +1,7 @@
+[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidUsingConvertToSecureStringWithPlainText', '')]
+param
+()
+
 # This configuration configures a Basic WordPress Site
 # It requires xPhp, xMySql, xWordPress, and xWebAdministration
 # Please review the note about the FQDN variable and
