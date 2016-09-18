@@ -47,7 +47,7 @@ $configurationData = @{
 
             WordPress = @{
                 Title = "DSC WordPress Site Title"
-                Admin = New-Object -TypeName System.Management.Automation.PSCredential -argumentlist (“DscAdmin”,$pwd)
+                Admin = New-Object -TypeName System.Management.Automation.PSCredential -argumentlist (ï¿½DscAdminï¿½,$pwd)
                 Email = "dscadmin@contoso.com"
                 Uri = "http://$fqdn"
                 DownloadURI = "http://WordPress.org/latest.zip"
@@ -57,7 +57,7 @@ $configurationData = @{
                 TemplatePath = $WordPressTemplatePath  
                 UserName = $WordPressUserName
                 Database = $WordPressDatabase
-                User = New-Object -TypeName System.Management.Automation.PSCredential -argumentlist (“$WordPressUserName”,$pwd)  
+                User = New-Object -TypeName System.Management.Automation.PSCredential -argumentlist (ï¿½$WordPressUserNameï¿½,$pwd)  
             }    
             
             Php = @{
@@ -70,7 +70,7 @@ $configurationData = @{
 
             PackageFolder = "$env:SystemDrive\packages"
             MySqlDownloadURI = "http://dev.mysql.com/get/Downloads/MySQLInstaller/mysql-installer-community-5.6.17.0.msi"
-            Credential = New-Object -TypeName System.Management.Automation.PSCredential -argumentlist (“userNameNotUsed”,$pwd) #the password for root. no user name is needed as MySql installer is using only the user "root".
+            Credential = New-Object -TypeName System.Management.Automation.PSCredential -argumentlist (ï¿½userNameNotUsedï¿½,$pwd) #the password for root. no user name is needed as MySql installer is using only the user "root".
             PlainPassword = $plainPassword
             
          }
@@ -96,7 +96,7 @@ Configuration WordPress
         }
 
         # Make sure PHP is installed in IIS
-        xPhp  php
+        xPhpProvision  php
         {
             InstallMySqlExt = $true
             PackageFolder =  $Node.PackageFolder
