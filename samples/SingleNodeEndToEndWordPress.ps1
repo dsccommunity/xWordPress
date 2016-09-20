@@ -57,7 +57,7 @@ $configurationData = @{
                 TemplatePath = $WordPressTemplatePath  
                 UserName = $WordPressUserName
                 Database = $WordPressDatabase
-                User = New-Object -TypeName System.Management.Automation.PSCredential -argumentlist ("$WordPressUserName", $pwd)  
+                User = New-Object -TypeName System.Management.Automation.PSCredential -argumentlist ($WordPressUserName, $pwd)  
             }    
             
             Php = @{
