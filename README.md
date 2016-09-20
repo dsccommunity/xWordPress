@@ -36,6 +36,8 @@ Please check out common DSC Resources [contributing guidelines](https://github.c
 
 ### Unreleased
 * Converted appveyor.yml to install Pester from PSGallery instead of from Chocolatey.
+* Updated sample to reference the renamed xPhpProvision resource in the xPhp module
+and version 5.7.15 of MySQL.
 
 ### 1.1.0.0
 
@@ -71,7 +73,7 @@ Note: This requires the following DSC modules:
 # **************************
 [string] $fqdn = [System.Net.Dns]::GetHostByName(($env:computerName)).HostName
 Write-Host "Target Machine FQDN: $fqdn"
-[string] $role = "WordPress"
+[string] $role = 'WordPress'
 $dataRoot = Split-Path $MyInvocation.MyCommand.Path
 $phpTemplatePath = join-Path $dataRoot "phpConfigTemplate.txt"
 $WordPressTemplatePath = Join-Path $dataRoot "WordPressConfigurationTemplate.ps1"
@@ -81,12 +83,12 @@ if (-not (Test-Path $WordPressTemplatePath))
     # This file is in the samples folder of the resource
     throw $message
 }
-$plainPassword = "pass@word1"
+$plainPassword = 'pass@word1'
 $pwd = convertTo-SecureString -String $plainPassword -AsPlainText -Force
-$WordPressUserName = "WordPressUser"
-$WordPressDatabase = "WordPress"
+$WordPressUserName = 'WordPressUser'
+$WordPressDatabase = 'WordPress'
 # Generate the contents of the WordPress configuration
-$wordPressConfig = &amp;amp;amp;amp;amp;amp; $WordPressTemplatePath -WordPressDatabase $WordPressDatabase -WordPressUserName $WordPressUserName -PlainPassword $plainPassword
+$wordPressConfig = & $WordPressTemplatePath -WordPressDatabase $WordPressDatabase -WordPressUserName $WordPressUserName -PlainPassword $plainPassword
 # ********* NOTE ***********
 # PHP and My SQL change their download URLs frequently.  Please verify the URLs.
 # the WordPress and VC Redist URL change less frequently, but should still be verified.
@@ -99,30 +101,30 @@ $configurationData = @{
             NodeName = $fqdn
             PSDscAllowPlainTextPassword = $true;
             WordPress = @{
-                Title = "DSC WordPress Site Title"
-                Admin = New-Object -TypeName System.Management.Automation.PSCredential -argumentlist (“DscAdmin”,$pwd)
-                Email = "dscadmin@contoso.com"
+                Title = 'DSC WordPress Site Title'
+                Admin = New-Object -TypeName System.Management.Automation.PSCredential -argumentlist ('DscAdmin', $pwd)
+                Email = 'dscadmin@contoso.com'
                 Uri = "http://$fqdn"
-                DownloadURI = "http://WordPress.org/latest.zip"
-                Path = (Join-Path $env:SystemDrive  "wwwWordPress")
+                DownloadURI = 'http://WordPress.org/latest.zip'
+                Path = (Join-Path $env:SystemDrive  'wwwWordPress')
                 Config = $wordPressConfig
-                SiteName = "WordPress"
+                SiteName = 'WordPress'
                 TemplatePath = $WordPressTemplatePath  
                 UserName = $WordPressUserName
                 Database = $WordPressDatabase
-                User = New-Object -TypeName System.Management.Automation.PSCredential -argumentlist (“$WordPressUserName”,$pwd)  
+                User = New-Object -TypeName System.Management.Automation.PSCredential -argumentlist ($WordPressUserName, $pwd)  
             }    
 
             Php = @{
                 # Update with the latest "VC11 x64 Non Thread Safe" from http://windows.php.net/download/
-                DownloadURI = "http://windows.php.net/downloads/releases/php-5.5.14-nts-Win32-VC11-x64.zip"
+                DownloadURI = 'http://windows.php.net/downloads/releases/php-5.5.14-nts-Win32-VC11-x64.zip'
                 TemplatePath = $phpTemplatePath 
                 Path = "$env:SystemDrive\php"
-                Vc2012RedistUri = "http://download.microsoft.com/download/1/6/B/16B06F60-3B20-4FF2-B699-5E9B7962F9AE/VSU_4/vcredist_x64.exe"
+                Vc2012RedistUri = 'http://download.microsoft.com/download/1/6/B/16B06F60-3B20-4FF2-B699-5E9B7962F9AE/VSU_4/vcredist_x64.exe'
             }
             PackageFolder = "$env:SystemDrive\packages"
-            MySqlDownloadURI = "http://dev.mysql.com/get/Downloads/MySQLInstaller/mysql-installer-community-5.6.17.0.msi"
-            Credential = New-Object -TypeName System.Management.Automation.PSCredential -argumentlist (“userNameNotUsed”,$pwd) #the password for root. no user name is needed as MySql installer is using only the user "root".
+            MySqlDownloadURI = 'http://dev.mysql.com/get/Downloads/MySQLInstaller/mysql-installer-community-5.7.15.0.msi'
+            Credential = New-Object -TypeName System.Management.Automation.PSCredential -argumentlist ('userNameNotUsed', $pwd) #the password for root. no user name is needed as MySql installer is using only the user "root".
             PlainPassword = $plainPassword
 
          }
@@ -141,11 +143,11 @@ Configuration WordPress
         File PackagesFolder
         {
             DestinationPath = $Node.PackageFolder
-            Type = "Directory"
-            Ensure = "Present"
+            Type = 'Directory'
+            Ensure = 'Present'
         }
         # Make sure PHP is installed in IIS
-        xPhp php
+        xPhpProvision php
         {
             InstallMySqlExt = $true
             PackageFolder =  $Node.PackageFolder
@@ -157,11 +159,12 @@ Configuration WordPress
         # Make sure MySql is installed with a WordPress database
         xMySqlProvision mySql
         {
-            ServiceName = "MySqlService"
             DownloadURI = $Node.MySqlDownloadURI
+            MySQLVersion = '5.7.15'
             RootCredential = $Node.Credential
-            DatabaseName = "WordPress"
+            DatabaseName = 'WordPress'
             UserCredential =  $Node.WordPress.User
+            PermissionType = 'ALL PRIVILEGES'
         }
 
         # Make sure the IIS site for WordPress is created
