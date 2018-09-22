@@ -1,6 +1,6 @@
 [![Build status](https://ci.appveyor.com/api/projects/status/ry28ehtnhrybtjti/branch/master?svg=true)](https://ci.appveyor.com/project/PowerShell/xwordpress/branch/master)
 
-#xWordPress
+# xWordPress
 
 The **xWordPress** module contains the **xWordPressSite** and **xIisWordPressSite** DSC resources that setup a WordPress Site.
 
@@ -8,8 +8,8 @@ This project has adopted the [Microsoft Open Source Code of Conduct](https://ope
 For more information see the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additional questions or comments.
 
 ## Contributing
-Please check out common DSC Resources [contributing guidelines](https://github.com/PowerShell/DscResource.Kit/blob/master/CONTRIBUTING.md).
 
+Please check out common DSC Resources [contributing guidelines](https://github.com/PowerShell/DscResource.Kit/blob/master/CONTRIBUTING.md).
 
 ## Resources
 
@@ -21,7 +21,7 @@ Please check out common DSC Resources [contributing guidelines](https://github.c
 * **DestinationPath**: The path on the filesystem were the web site will be setup.
 * **DownloadUri**: The URI to download the WordPress Zip file
 * **PackageFolder**: The URI to download the WordPress Zip file computer name
-* **PackageFolder**: The folder where the WordPress zip will be downloaded. This path MUST already exist. 
+* **PackageFolder**: The folder where the WordPress zip will be downloaded. This path MUST already exist.
 * **Configuration**: The contents of the WordPress configuration file (wp-config.php).
 
 ### xWordPressSite
@@ -35,9 +35,14 @@ Please check out common DSC Resources [contributing guidelines](https://github.c
 ## Versions
 
 ### Unreleased
-* Converted appveyor.yml to install Pester from PSGallery instead of from Chocolatey.
-* Updated sample to reference the renamed xPhpProvision resource in the xPhp module
-and version 5.7.15 of MySQL.
+
+* Updated sample to reference the renamed xPhpProvision resource in the xPhp
+  module and version 5.7.15 of MySQL.
+* Update appveyor.yml to use the default template.
+* Added default template files .codecov.yml, .gitattributes, and .gitignore, and
+  .vscode folder.
+* Minor style changes to README.md.
+* Added `Import-DscResource` to xIisWordPressSite to import dependent modules.
 
 ### 1.1.0.0
 
@@ -46,19 +51,20 @@ and version 5.7.15 of MySQL.
 
 ### 1.0.0.0
 
-* Initial release with the following resources 
-    - xWordPressSite
-    - xIisWordPressSite
+* Initial release with the following resources
+  * xWordPressSite
+  * xIisWordPressSite
 
 ## Examples
 
 ### Setup a WordPress Site on a single node
 
-This configuration will set a WordPress Site on a single node. 
+This configuration will set a WordPress Site on a single node.
 Note: This requires the following DSC modules:
+
 * xPsDesiredStateConfiguration
 * xMySql
-* xPhp 
+* xPhp
 * xWebAdministration
 
 ```powershell
@@ -67,7 +73,7 @@ Note: This requires the following DSC modules:
 # Please review the note about the FQDN variable and
 # about the URLs, they may need to be updated.
 # ********* NOTE ***********
-# If you are not targetting the local machine, 
+# If you are not targeting the local machine,
 # or this does not resolve to the correct FQDN for the machine
 # Update this to the FQDN of the target machine
 # **************************
@@ -94,8 +100,8 @@ $wordPressConfig = & $WordPressTemplatePath -WordPressDatabase $WordPressDatabas
 # the WordPress and VC Redist URL change less frequently, but should still be verified.
 # After verifying the download URLs for the products and update them appropriately.
 # **************************
-$configurationData = @{  
-    AllNodes = @(        
+$configurationData = @{
+    AllNodes = @(
         @{
             Role = $role
             NodeName = $fqdn
@@ -109,16 +115,16 @@ $configurationData = @{
                 Path = (Join-Path $env:SystemDrive  'wwwWordPress')
                 Config = $wordPressConfig
                 SiteName = 'WordPress'
-                TemplatePath = $WordPressTemplatePath  
+                TemplatePath = $WordPressTemplatePath
                 UserName = $WordPressUserName
                 Database = $WordPressDatabase
-                User = New-Object -TypeName System.Management.Automation.PSCredential -argumentlist ($WordPressUserName, $pwd)  
-            }    
+                User = New-Object -TypeName System.Management.Automation.PSCredential -argumentlist ($WordPressUserName, $pwd)
+            }
 
             Php = @{
                 # Update with the latest "VC11 x64 Non Thread Safe" from http://windows.php.net/download/
                 DownloadURI = 'http://windows.php.net/downloads/releases/php-5.5.14-nts-Win32-VC11-x64.zip'
-                TemplatePath = $phpTemplatePath 
+                TemplatePath = $phpTemplatePath
                 Path = "$env:SystemDrive\php"
                 Vc2012RedistUri = 'http://download.microsoft.com/download/1/6/B/16B06F60-3B20-4FF2-B699-5E9B7962F9AE/VSU_4/vcredist_x64.exe'
             }
@@ -128,13 +134,13 @@ $configurationData = @{
             PlainPassword = $plainPassword
 
          }
-    )  
+    )
 }
 # Configuration to configure a Single machine WordPress Site
 Configuration WordPress
 {
     # Import composite resources
-    Import-DscResource -module xMySql 
+    Import-DscResource -module xMySql
     Import-DscResource -module xPhp
     Import-DscResource -module xWordPress
     Node $AllNodes.NodeName
@@ -173,7 +179,7 @@ Configuration WordPress
         {
             DestinationPath = $Node.WordPress.Path
             DownloadUri = $Node.WordPress.DownloadURI
-            PackageFolder = $Node.PackageFolder 
+            PackageFolder = $Node.PackageFolder
             Configuration = $Node.WordPress.Config
         }
         # Make sure the WordPress site is present
@@ -183,7 +189,7 @@ Configuration WordPress
             Title = $Node.WordPress.Title
             AdministratorCredential = $Node.WordPress.Admin
             AdministratorEmail = $Node.WordPress.Email
-        } 
+        }
         # Make sure LCM will reboot if needed
         LocalConfigurationManager
         {
