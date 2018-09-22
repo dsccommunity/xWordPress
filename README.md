@@ -42,6 +42,7 @@ Please check out common DSC Resources [contributing guidelines](https://github.c
 * Added default template files .codecov.yml, .gitattributes, and .gitignore, and
   .vscode folder.
 * Minor style changes to README.md.
+* Added `Import-DscResource` to xIisWordPressSite to import dependent modules.
 
 ### 1.1.0.0
 
