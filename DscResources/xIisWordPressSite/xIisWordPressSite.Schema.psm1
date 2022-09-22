@@ -17,6 +17,9 @@ configuration xIisWordPressSite
         [string] $Configuration
     )
 
+        Import-DscResource -ModuleName 'xPSDesiredStateConfiguration'
+        Import-DscResource -ModuleName 'xWebAdministration'
+
         [string] $BinaryFolder = Join-Path $DestinationPath "WordPress"
 
             # Make sure the WordPress site folder is present
@@ -36,11 +39,11 @@ configuration xIisWordPressSite
                 PhysicalPath = "$env:SystemDrive\inetpub\wwwroot"
                 Ensure = "Present"
                 State = "Started"
-                BindingInfo     = MSFT_xWebBindingInformation 
-                            { 
-                            Protocol              = "HTTP" 
-                            Port                  = 9090 
-                            } 
+                BindingInfo     = MSFT_xWebBindingInformation
+                            {
+                            Protocol              = "HTTP"
+                            Port                  = 9090
+                            }
             }
 
             # Make sure the WordPress Iis site is present
@@ -50,13 +53,13 @@ configuration xIisWordPressSite
                 PhysicalPath = $BinaryFolder
                 Ensure = "Present"
                 State = "Started"
-                DefaultPage = @("index.php") 
+                DefaultPage = @("index.php")
                 DependsOn = @("[File]WordPressFolder","[xWebSite]DefaultIisSite")
             }
 
             $WordPressZip = Join-Path $PackageFolder "WordPress.zip"
             # Make sure the WordPress archive is in the package folder
-            xRemoteFile WordPressArchive 
+            xRemoteFile WordPressArchive
             {
                 Uri = $DownloadUri
                 DestinationPath = $WordPressZip
@@ -69,7 +72,7 @@ configuration xIisWordPressSite
                 Destination = $DestinationPath
                 DependsOn = @("[xRemoteFile]WordPressArchive","[File]WordPressFolder")
             }
-            
+
             # Make sure the WordPress configuration file is present
             File WordPressConfig
             {
